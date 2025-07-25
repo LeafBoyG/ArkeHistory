@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.target.classList.contains('is-visible')) {
-                    setTimeout(animateDigits, 600); // Wait for the .js-fade-in transition (0.6s) plus a small buffer
+                    setTimeout(animateDigits, 2600); // Wait for the .js-fade-in transition (0.6s) plus a small buffer
                     observer.unobserve(animationContainer);
                 }
             });

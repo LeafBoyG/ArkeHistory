@@ -583,7 +583,7 @@ ul li, ol li {
 }
 
 .digit-slot {
-    perspective: 600px;
+    perspective: 2600px;
     margin: 0 1px;
     width: 0.7em; /* Adjust based on your chosen font's digit width */
     height: 1.2em; /* Ensure height matches line-height or font-size for single digit */
