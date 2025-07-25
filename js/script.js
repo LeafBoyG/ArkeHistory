@@ -150,25 +150,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 2. CONTENT FEATURES ---
 
     /**
-     * Dynamically creates accessible tooltips for defined terms.
-     * Requires elements with class="tooltip" and data-tooltip="Your tooltip text".
+     * Dynamically creates accessible tooltips for defined terms, now with optional images.
+     * Requires elements with class="tooltip" and:
+     * - data-tooltip-description="Your tooltip text."
+     * - data-tooltip-image="path/to/image.jpg" (optional)
+     * OR
+     * - data-tooltip="Your tooltip text." (for text-only tooltips)
      */
     const setupTooltips = () => {
         const tooltips = document.querySelectorAll('.tooltip');
         if (!tooltips.length) return;
 
         tooltips.forEach((tooltip, index) => {
-            const text = tooltip.dataset.tooltip;
-            if (!text) return; // Skip if no tooltip text is provided
+            // Check for new attributes first
+            const descriptionText = tooltip.dataset.tooltipDescription;
+            const imageUrl = tooltip.dataset.tooltipImage;
 
-            tooltip.setAttribute('tabindex', '0'); // Make focusable
-            tooltip.setAttribute('aria-describedby', `tooltip-${index}`); // Link to tooltip box for accessibility
+            // Fallback to old data-tooltip if new ones aren't present (for existing text-only tooltips)
+            const oldTooltipText = tooltip.dataset.tooltip; 
+            const finalDescription = descriptionText || oldTooltipText; // Prefer new, fallback to old
+
+            if (!finalDescription && !imageUrl) return; // Skip if no content
+
+            // Set up accessibility attributes
+            tooltip.setAttribute('tabindex', '0');
+            tooltip.setAttribute('aria-describedby', `tooltip-${index}`);
 
             const box = document.createElement('div');
             box.className = 'tooltip-box';
             box.setAttribute('role', 'tooltip');
             box.setAttribute('id', `tooltip-${index}`);
-            box.textContent = text;
+
+            if (imageUrl) {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = tooltip.textContent + ' portrait'; // Alt text for accessibility
+                img.className = 'tooltip-image'; // For styling
+                box.appendChild(img);
+            }
+
+            if (finalDescription) { // Use finalDescription
+                const p = document.createElement('p');
+                p.textContent = finalDescription;
+                box.appendChild(p);
+            }
+            
             tooltip.appendChild(box);
         });
     };
@@ -426,7 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // **CHANGE HERE: Increased delay to 300ms**
                     setTimeout(() => {
                         startRollingAnimation(); 
                     }, 300); // Give a slightly longer delay (e.g., 300ms) to ensure elements are fully rendered
