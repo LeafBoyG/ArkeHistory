@@ -426,13 +426,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // **CRUCIAL CHANGE HERE:**
-                    // Instead of checking 'is-visible' (which is from another observer),
-                    // directly use a setTimeout to give the browser time to render elements
-                    // and then start the animation.
+                    // **CHANGE HERE: Increased delay to 300ms**
                     setTimeout(() => {
                         startRollingAnimation(); 
-                    }, 100); // A small delay (e.g., 100ms) to ensure CSS/layout is applied
+                    }, 300); // Give a slightly longer delay (e.g., 300ms) to ensure elements are fully rendered
 
                     observerInstance.unobserve(animationContainer); // Stop observing once triggered
                 }
