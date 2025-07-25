@@ -395,3 +395,76 @@
     color: var(--color-royal-blue);
     transform: translateY(-2px);
 }
+
+/* Basic styling for the tooltip container (the word with the tooltip) */
+.tooltip {
+    position: relative; /* Needed for positioning the tooltip box */
+    display: inline-block; /* Allows text flow but gives control */
+    cursor: help; /* Indicates interactivity */
+    border-bottom: 1px dotted var(--color-royal-blue); /* Optional: visual cue */
+    color: var(--color-royal-blue); /* Optional: style the text */
+    font-weight: 500; /* Optional: make it stand out */
+}
+
+/* Styling for the tooltip box itself (initially hidden) */
+.tooltip-box {
+    visibility: hidden; /* Hidden by default */
+    opacity: 0; /* Hidden by default */
+    position: absolute;
+    bottom: 125%; /* Position above the text */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px); /* Center horizontally, push down slightly */
+    padding: 0.75rem 1rem;
+    background-color: var(--color-navy); /* Dark background */
+    color: var(--color-white); /* White text */
+    text-align: center;
+    border-radius: 8px;
+    white-space: nowrap; /* Prevent text wrapping */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    z-index: 1000; /* Ensure it's above other content */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease; /* Smooth transition */
+    min-width: 150px;
+    max-width: 300px; /* Allow some wrapping for longer tooltips */
+    white-space: normal; /* Override nowrap for max-width to work */
+}
+
+/* Arrow for the tooltip box */
+.tooltip-box::after {
+    content: '';
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip box */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: var(--color-navy) transparent transparent transparent; /* Creates a downward-pointing arrow */
+}
+
+/* Show the tooltip box on hover or focus */
+.tooltip:hover .tooltip-box,
+.tooltip:focus .tooltip-box,
+.tooltip[aria-describedby]:focus + .tooltip-box { /* For accessibility via script, if needed */
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0); /* Move up to desired position */
+}
+
+
+/* Optional: Responsive adjustments for small screens to prevent tooltips from going off-screen */
+@media (max-width: 768px) {
+    .tooltip-box {
+        left: var(--spacing-unit); /* Position from left edge */
+        right: var(--spacing-unit); /* Position from right edge */
+        transform: none; /* Remove horizontal centering */
+        bottom: 100%; /* Adjust position to avoid keyboard */
+        width: auto; /* Allow full width between padding */
+        white-space: normal; /* Allow text to wrap */
+    }
+
+    .tooltip-box::after {
+        left: 50%; /* Keep arrow centered for small screens */
+        transform: translateX(-50%);
+    }
+}
