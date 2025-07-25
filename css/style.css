@@ -5,9 +5,9 @@
 @import url('_footer.css');
 @import url('_landing-page.css');
 @import url('_article-page.css');
-@import url('_general-pages.css'); /* This is where the topic-articles-list and general page styles will go */
+@import url('_general-pages.css');
 @import url('_responsive.css');
-#rolling-year {
+/* #rolling-year {
   display: inline-flex;
   font-family: monospace;
   font-size: 2.5rem;

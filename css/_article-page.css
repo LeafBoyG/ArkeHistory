@@ -569,3 +569,66 @@ ul li, ol li {
     padding-bottom: 0;
     line-height: 1; /* Align vertically with number */
 }
+/* Add/confirm these rules in css/_article-page.css */
+
+#rolling-year {
+    display: inline-flex; /* Ensures digits stay in a row */
+    font-family: var(--font-heading); /* Use the heading font, as it's big and bold */
+    font-size: clamp(2.5rem, 6vw, 4rem); /* Match the target size of the year in hero */
+    line-height: 1.2; /* Ensure line-height provides proper height for digits */
+    color: var(--color-white); /* Match hero text color */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    letter-spacing: -0.02em; /* Tighter kerning */
+    font-weight: 700; /* Ensure digits are bold */
+}
+
+.digit-slot {
+    perspective: 600px;
+    margin: 0 1px;
+    width: 0.7em; /* Adjust based on your chosen font's digit width */
+    height: 1.2em; /* Ensure height matches line-height or font-size for single digit */
+    overflow: hidden;
+    position: relative;
+    display: flex; /* Helps ensure height is calculated */
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.digit-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out; /* Match JS animation duration for transform */
+    transform-style: preserve-3d;
+}
+
+.digit-strip span {
+    display: block;
+    width: 100%; /* Make span fill slot width */
+    height: 1.2em; /* Match digit-slot height */
+    line-height: 1.2em; /* Match for vertical alignment */
+    text-align: center;
+    font-weight: bold; /* Ensure digits are bold */
+    backface-visibility: hidden; /* Helps prevent flickering */
+}
+
+.bce-label {
+    margin-left: 0.25rem;
+    font-size: 0.6em; /* Relative to parent font-size */
+    opacity: 0.7;
+    align-self: flex-end; /* Align BCE label to the bottom of the number */
+    line-height: 1; /* Keep it tight */
+    padding-bottom: 0.1em; /* Adjust to align with bottom of number */
+}
+
+.historical-distance-text { /* This is the "AD" or "Years Ago" text */
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    margin-bottom: 0;
+    line-height: 1;
+    margin-left: 8px; /* Space between number and text */
+    align-self: flex-end; /* Align to the bottom of the number */
+    padding-bottom: 0.1em; /* Fine-tune vertical position */
+}
