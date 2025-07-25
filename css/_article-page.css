@@ -632,7 +632,8 @@ ul li, ol li {
     align-self: flex-end; /* Align to the bottom of the number */
     padding-bottom: 0.1em; /* Fine-tune vertical position */
 }
-/* --- Tooltip styles (New/Modified for images) --- */
+
+/* --- Tooltip styles (Revised for robust mobile containment) --- */
 
 /* Basic styling for the tooltip container (the word with the tooltip) */
 .tooltip {
@@ -650,8 +651,11 @@ ul li, ol li {
     opacity: 0; /* Hidden by default */
     position: absolute;
     bottom: 125%; /* Position above the text */
+    
+    /* Default desktop/larger screen horizontal positioning */
     left: 50%;
     transform: translateX(-50%) translateY(10px); /* Center horizontally, push down slightly */
+    
     padding: 0.75rem 1rem;
     background-color: var(--color-navy); /* Dark background */
     color: var(--color-white); /* White text */
@@ -660,15 +664,16 @@ ul li, ol li {
     z-index: 1000; /* Ensure it's above other content */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease; /* Smooth transition */
-    min-width: 150px;
-    max-width: 300px; /* Allow some wrapping for longer tooltips */
+    
+    /* Max width for desktop/larger screens */
+    max-width: 300px;
     white-space: normal; /* Allow text to wrap for descriptions */
 
-    /* NEW: Flexbox for image and text layout within the tooltip box */
-    display: flex;         /* Use flexbox for internal layout */
-    flex-direction: column; /* Stack image and text vertically */
-    align-items: center;   /* Center items horizontally */
-    gap: 0.5rem;           /* Space between image and text */
+    /* Flexbox for image and text layout within the tooltip box */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 /* Arrow for the tooltip box */
@@ -688,10 +693,11 @@ ul li, ol li {
 .tooltip:focus .tooltip-box {
     visibility: visible;
     opacity: 1;
-    transform: translateX(-50%) translateY(0); /* Move up to desired position */
+    /* On hover/focus, remove the translateY(10px) to make it "pop" up */
+    transform: translateX(-50%) translateY(0); 
 }
 
-/* NEW: Styling for the image inside the tooltip */
+/* Styling for the image inside the tooltip */
 .tooltip-image {
     width: 60px;   /* Adjust size as desired */
     height: 60px;  /* Keep aspect ratio */
@@ -701,7 +707,7 @@ ul li, ol li {
     border: 2px solid var(--color-royal-blue); /* Optional: a nice border */
 }
 
-/* NEW: Adjust paragraph styling within the tooltip if needed */
+/* Adjust paragraph styling within the tooltip */
 .tooltip-box p {
     margin: 0; /* Remove default paragraph margin within tooltip to control spacing with gap */
     font-size: 0.9rem; /* Adjust font size */
@@ -709,19 +715,39 @@ ul li, ol li {
     text-align: center;
 }
 
-
-/* Optional: Responsive adjustments for small screens (from previous code, ensure it's still suitable) */
+/* --- Responsive adjustments for small screens --- */
 @media (max-width: 768px) {
     .tooltip-box {
-        left: var(--spacing-unit);
-        right: var(--spacing-unit);
-        transform: none;
-        bottom: 100%;
-        width: auto;
-        white-space: normal;
+        /* Mobile specific horizontal positioning: 
+           Puts it within 1x spacing-unit from left and right edges,
+           and centers it between those points if its content is smaller than the available space. */
+        left: var(--spacing-unit);      
+        right: var(--spacing-unit);     
+        margin-left: auto;              /* Combined with left/right, centers the box if it's smaller than max-width */
+        margin-right: auto;             /* Combined with left/right, centers the box if it's smaller than max-width */
+        
+        /* IMPORTANT: Override transform to remove horizontal centering from desktop */
+        transform: translateY(10px);    /* Keep the vertical pop-up transform */
+        
+        /* Guarantee max-width to not exceed viewport (minus padding) */
+        max-width: calc(100vw - (var(--spacing-unit) * 2)); 
+        width: auto; /* Let content dictate width within max-width */
+        
+        /* Vertical positioning (keep it above the element for consistency) */
+        bottom: 125%; 
+        
+        white-space: normal; /* Ensure text wraps */
     }
+
+    /* Arrow position for mobile: must also remove translateX for consistency with .tooltip-box */
     .tooltip-box::after {
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%); /* This transform is still needed for the arrow itself */
+    }
+
+    /* Adjust tooltip-box on hover/focus for mobile */
+    .tooltip:hover .tooltip-box,
+    .tooltip:focus .tooltip-box {
+        transform: translateY(0); /* Remove the initial translateY from mobile state */
     }
 }
